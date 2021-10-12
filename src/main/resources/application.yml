@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    username: peter
+    password: 820517
+    url: jdbc:mysql://localhost:3306/house
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  main:
+    allow-bean-definition-overriding: true
+
+mybatis:
+  mapper-locations: classpath:mappers/*.xml

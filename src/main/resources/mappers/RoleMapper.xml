@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.house.mapper.RoleMapper">
+    <resultMap id="roleMapper" type="com.example.house.domain.Role">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="name" property="name"/>
+    </resultMap>
+    <insert id="save" parameterType="com.example.house.domain.Role" useGeneratedKeys="true" keyProperty="id">
+        insert into role(id, user_id, name) values (#{id}, #{userId}, #{name})
+    </insert>
+    <select id="findRolesByUserId" resultMap="roleMapper" parameterType="java.lang.Long">
+        select id, user_id, name
+        from role
+        where user_id = #{userId}
+    </select>
+</mapper>
