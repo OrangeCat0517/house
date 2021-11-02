@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.house.mapper">
+<mapper namespace="com.example.house.mapper.HouseTagMapper">
+    <select id="findByNameAndHouseId" resultType="com.example.house.domain.HouseTag">
+        select * from house_tag where house_id=#{houseId} and name = ${name}
+    </select>
+    <select id="findAllByHouseId" resultType="com.example.house.domain.HouseTag">
+        select * from house_tag where id=#{id}
+    </select>
 
+    <select id="findAllByHouseIdIn" resultType="com.example.house.domain.HouseTag">
+        select * from house_tag where id in
+        <foreach item="id"  collection="houseIds" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
 </mapper>

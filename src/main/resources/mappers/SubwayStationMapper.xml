@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.house.mapper">
-
+<mapper namespace="com.example.house.mapper.SubwayStationMapper">
+    <select id="findAllBySubwayId" resultType="com.example.house.domain.SubwayStation">
+        select * from subway_station where  subway_id = #{subwayId}
+    </select>
 </mapper>

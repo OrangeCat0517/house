@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.house.mapper">
+<mapper namespace="com.example.house.mapper.HouseSubscribeMapper">
+    <select id="findByHouseIdAndUserId" resultType="com.example.house.domain.HouseSubscribe">
+        select *
+        from house_subscribe where house_id=#{houseId} and user_id=#{loginUserId}
+    </select>
+
+    <select id="findAllByUserIdAndStatus" resultType="com.example.house.domain.HouseSubscribe">
+        select *
+        from house_subscribe where status=#{status} and user_id=#{userId}
+    </select>
+
+    <select id="findAllByAdminIdAndStatus" resultType="com.example.house.domain.HouseSubscribe">
+        select *
+        from house_subscribe where status=#{status} and admin_id=#{adminId}
+    </select>
+
+    <select id="findByHouseIdAndAdminId" resultType="com.example.house.domain.HouseSubscribe">
+        select *
+        from house_subscribe where house_id=#{houseId} and admin_id=#{adminId}
+    </select>
+
+    <update id="updateStatus">
+        update house_subscribe set status=#{status} where id=#{id}
+    </update>
 
 </mapper>

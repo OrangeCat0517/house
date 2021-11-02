@@ -18,6 +18,7 @@ class HouseApplicationTests {
     void contextLoads() {
         //iSmsService.sendSms("1923823832");
         System.out.println(passwordEncoder.encode("admin"));
+        System.out.println(passwordEncoder.encode("123456"));
     }
 
 }
