@@ -8,4 +8,5 @@ import java.util.List;
 @Mapper
 public interface SubwayStationMapper {
     List<SubwayStation> findAllBySubwayId(Long subwayId);
+    SubwayStation findOne(Long subwayId);
 }

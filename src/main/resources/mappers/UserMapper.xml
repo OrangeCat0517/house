@@ -16,8 +16,7 @@
     <sql id="userColumns">
         id, name, email, phone_number, password, status, create_time, last_login_time, last_update_time, avatar
     </sql>
-    <insert id="save" parameterType="com.example.house.domain.User"
-            useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="com.example.house.domain.User" useGeneratedKeys="true" keyProperty="id">
         insert into user(name, email, phone_number, password, status, create_time, last_login_time, last_update_time, avatar)
         values (#{name}, #{email}, #{phoneNumber}, #{password}, #{status}, #{createTime}, #{lastLoginTime}, #{lastUpdateTime}, #{avatar})
     </insert>

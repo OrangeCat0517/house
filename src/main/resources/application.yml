@@ -15,4 +15,9 @@ pagehelper:
   support-methods-arguments: true
   params: count=countSql
 
-
+qiniu:
+  AccessKey: lfR0brsA3cZlJifqBRBpERvTU01b2Za-9pdLCoKL
+  SecretKey: oXQsKQPNYZAXnC2MqFjsTElpgxJThsiGolUVekZW
+  Bucket: pengsuen
+  cdn:
+    prefix: http://7xo6gy.com1.z0.glb.clouddn.com/

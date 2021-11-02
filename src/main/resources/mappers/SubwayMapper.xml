@@ -4,4 +4,8 @@
     <select id="findAllByCityEnName" resultType="com.example.house.domain.Subway">
         select * from subway where city_en_name = #{cityEnName}
     </select>
+
+    <select id="findOne" resultType="com.example.house.domain.Subway">
+        select * from subway where id = #{subwayId}
+    </select>
 </mapper>

@@ -4,4 +4,7 @@
     <select id="findAllBySubwayId" resultType="com.example.house.domain.SubwayStation">
         select * from subway_station where  subway_id = #{subwayId}
     </select>
+    <select id="findOne" resultType="com.example.house.domain.SubwayStation">
+        select * from subway_station where  subway_id = #{subwayId}
+    </select>
 </mapper>

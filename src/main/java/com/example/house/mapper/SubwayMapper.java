@@ -8,4 +8,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface SubwayMapper {
     List<Subway> findAllByCityEnName(String cityEnName);
+    Subway findOne(Long subwayId);
 }
