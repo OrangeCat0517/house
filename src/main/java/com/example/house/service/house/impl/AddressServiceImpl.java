@@ -46,6 +46,8 @@ public class AddressServiceImpl implements IAddressService {
                     modelMapper.map(supportAddress, SupportAddressDTO.class);
             addressDTOS.add(target);
         }
+        System.out.println("=================================" + addresses);
+        System.out.println("=================================" + addressDTOS);
         return new ServiceMultiResult<>(addressDTOS.size(), addressDTOS);
     }
 

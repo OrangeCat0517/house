@@ -16,6 +16,7 @@ spring:
     timeout: 3000
 
 
+
 mybatis:
   mapper-locations: classpath:mappers/*.xml
 pagehelper:
@@ -30,3 +31,8 @@ qiniu:
   Bucket: pengsuen
   cdn:
     prefix: http://7xo6gy.com1.z0.glb.clouddn.com/
+
+logging:
+  level:
+    com:
+      example: debug

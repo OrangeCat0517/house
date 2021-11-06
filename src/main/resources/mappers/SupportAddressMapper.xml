@@ -1,19 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.house.mapper.SupportAddressMapper">
-    <select id="findAllByLevel" resultType="com.example.house.domain.SupportAddress">
+    <resultMap id="supportAddress" type="com.example.house.domain.SupportAddress">
+        <id column="id" property="id"/>
+        <result column="belong_to" property="belongTo"/>
+        <result column="en_name" property="enName"/>
+        <result column="cn_name" property="cnName"/>
+        <result column="level" property="level"/>
+        <result column="baidu_map_lng" property="baiduMapLongitude"/>
+        <result column="baidu_map_lat" property="baiduMapLatitude"/>
+    </resultMap>
+    <select id="findAllByLevel" resultMap="supportAddress">
         select * from support_address where level = #{level}
     </select>
 
-    <select id="findByEnNameAndLevel" resultType="com.example.house.domain.SupportAddress">
+    <select id="findByEnNameAndLevel" resultMap="supportAddress">
         select * from support_address where en_name=#{enName} and level=#{level}
     </select>
 
-    <select id="findByEnNameAndBelongTo" resultType="com.example.house.domain.SupportAddress">
+    <select id="findByEnNameAndBelongTo" resultMap="supportAddress">
         select * from support_address where en_name=#{enName} and belong_to=#{belongTo}
     </select>
 
-    <select id="findAllByLevelAndBelongTo" resultType="com.example.house.domain.SupportAddress">
+    <select id="findAllByLevelAndBelongTo" resultMap="supportAddress">
         select * from support_address where level=#{level} and belong_to=#{belongTo}
     </select>
 

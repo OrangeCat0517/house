@@ -11,7 +11,7 @@ public class ApiResponse {
     private Object data;
     private boolean more;
 
-    private ApiResponse(int code, String message, Object data) {
+    public ApiResponse(int code, String message, Object data) {
         this.code = code;
         this.message = message;
         this.data = data;
