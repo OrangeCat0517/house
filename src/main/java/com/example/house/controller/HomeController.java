@@ -3,7 +3,7 @@ package com.example.house.controller;
 import com.example.house.base.ApiResponse;
 import com.example.house.base.ServiceResult;
 import com.example.house.util.LoginUserUtil;
-import com.example.house.service.ISmsService;
+import com.example.house.service.users.ISmsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -55,6 +55,5 @@ public class HomeController {
         } else {
             return ApiResponse.ofMessage(HttpStatus.BAD_REQUEST.value(), result.getMessage());
         }
-
     }
 }

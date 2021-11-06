@@ -1,4 +1,4 @@
-package com.example.house.service.impl;
+package com.example.house.service.users.impl;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import com.example.house.domain.User;
 import com.example.house.dto.UserDTO;
 import com.example.house.mapper.RoleMapper;
 import com.example.house.mapper.UserMapper;
-import com.example.house.service.IUserService;
+import com.example.house.service.users.IUserService;
 import com.example.house.base.ServiceResult;
 import com.google.common.collect.Lists;
 import org.modelmapper.ModelMapper;

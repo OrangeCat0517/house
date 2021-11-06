@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.example.house.util.LoginUserUtil;
 import com.example.house.domain.User;
-import com.example.house.service.ISmsService;
-import com.example.house.service.IUserService;
+import com.example.house.service.users.ISmsService;
+import com.example.house.service.users.IUserService;
 import org.elasticsearch.common.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;

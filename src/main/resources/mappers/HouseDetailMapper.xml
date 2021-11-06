@@ -11,4 +11,8 @@
             #{id}
         </foreach>
     </select>
+    <insert id="save" parameterType="com.example.house.domain.HouseDetail" useGeneratedKeys="true">
+        insert into house_detail(description, layout_desc, traffic, round_service, rent_way, address, subway_line_id, subway_line_name, subway_station_id, subway_station_name, house_id)
+        VALUES (#{description}, #{layoutDesc}, #{traffic}, #{roundService}, #{rentWay}, #{address}, #{subwayLineId}, #{subwayLineName}, #{subwayStationId}, #{subwayStationName}, #{houseId})
+    </insert>
 </mapper>

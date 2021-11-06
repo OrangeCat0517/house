@@ -1,4 +1,4 @@
-package com.example.house.service;
+package com.example.house.service.users;
 
 
 import com.example.house.base.ServiceResult;

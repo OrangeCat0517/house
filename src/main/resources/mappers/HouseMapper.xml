@@ -10,4 +10,9 @@
     <update id="updateWatchTimes">
         update house set  watch_times=now() where id = #{houseId}
     </update>
+
+    <insert id="save" parameterType="com.example.house.domain.House" useGeneratedKeys="true" keyProperty="id">
+        insert into house(title, price, area, room, floor, total_floor, watch_times, build_year, status, create_time, last_update_time, city_en_name, region_en_name, cover, direction, distance_to_subway, parlour, district, admin_id, bathroom, street)
+        VALUES (#{title}, #{price}, #{area}, #{room},#{floor},#{totalFloor},#{watchTimes},#{buildYear},#{status},#{createTime},#{lastUpdateTime},#{cityEnName},#{regionEnName},#{cover}, #{direction},#{distanceToSubway},#{parlour},#{district},#{adminId},#{bathroom},#{street})
+    </insert>
 </mapper>

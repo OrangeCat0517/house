@@ -1,7 +1,7 @@
 package com.example.house.security;
 
 import com.example.house.domain.User;
-import com.example.house.service.IUserService;
+import com.example.house.service.users.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationProvider;

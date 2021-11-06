@@ -29,30 +29,23 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class AddressServiceImpl implements IAddressService {
     @Autowired
     private SupportAddressMapper supportAddressMapper;
-
     @Autowired
     private SubwayMapper subwayMapper;
-
     @Autowired
     private SubwayStationMapper subwayStationMapper;
-
     @Autowired
     private ModelMapper modelMapper;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
-
-
     @Override
     public ServiceMultiResult<SupportAddressDTO> findAllCities() {
-        List<SupportAddress> addresses = supportAddressMapper.findAllByLevel(SupportAddress.Level.CITY.getValue());
+        List<SupportAddress> addresses =
+                supportAddressMapper.findAllByLevel(SupportAddress.Level.CITY.getValue());
         List<SupportAddressDTO> addressDTOS = new ArrayList<>();
         for (SupportAddress supportAddress : addresses) {
-            SupportAddressDTO target = modelMapper.map(supportAddress, SupportAddressDTO.class);
+            SupportAddressDTO target =
+                    modelMapper.map(supportAddress, SupportAddressDTO.class);
             addressDTOS.add(target);
         }
-
         return new ServiceMultiResult<>(addressDTOS.size(), addressDTOS);
     }
 
@@ -60,25 +53,27 @@ public class AddressServiceImpl implements IAddressService {
     public Map<SupportAddress.Level, SupportAddressDTO> findCityAndRegion(String cityEnName, String regionEnName) {
         Map<SupportAddress.Level, SupportAddressDTO> result = new HashMap<>();
 
-        SupportAddress city = supportAddressMapper.findByEnNameAndLevel(cityEnName, SupportAddress.Level.CITY
-                .getValue());
-        SupportAddress region = supportAddressMapper.findByEnNameAndBelongTo(regionEnName, city.getEnName());
+        SupportAddress city =
+                supportAddressMapper
+                        .findByEnNameAndLevel(cityEnName, SupportAddress.Level.CITY.getValue());
+        SupportAddress region =
+                supportAddressMapper.findByEnNameAndBelongTo(regionEnName, city.getEnName());
 
-        result.put(SupportAddress.Level.CITY, modelMapper.map(city, SupportAddressDTO.class));
-        result.put(SupportAddress.Level.REGION, modelMapper.map(region, SupportAddressDTO.class));
+        result.put(SupportAddress.Level.CITY,
+                modelMapper.map(city, SupportAddressDTO.class));
+        result.put(SupportAddress.Level.REGION,
+                modelMapper.map(region, SupportAddressDTO.class));
         return result;
     }
 
     @Override
     public ServiceMultiResult<SupportAddressDTO> findAllRegionsByCityName(String cityName) {
-        if (cityName == null) {
+        if (cityName == null)
             return new ServiceMultiResult<>(0, null);
-        }
 
         List<SupportAddressDTO> result = new ArrayList<>();
 
-        List<SupportAddress> regions = supportAddressMapper.findAllByLevelAndBelongTo(SupportAddress.Level.REGION
-                .getValue(), cityName);
+        List<SupportAddress> regions = supportAddressMapper.findAllByLevelAndBelongTo(SupportAddress.Level.REGION.getValue(), cityName);
         for (SupportAddress region : regions) {
             result.add(modelMapper.map(region, SupportAddressDTO.class));
         }
@@ -92,7 +87,6 @@ public class AddressServiceImpl implements IAddressService {
         if (subways.isEmpty()) {
             return result;
         }
-
         subways.forEach(subway -> result.add(modelMapper.map(subway, SubwayDTO.class)));
         return result;
     }
@@ -104,7 +98,6 @@ public class AddressServiceImpl implements IAddressService {
         if (stations.isEmpty()) {
             return result;
         }
-
         stations.forEach(station -> result.add(modelMapper.map(station, SubwayStationDTO.class)));
         return result;
     }

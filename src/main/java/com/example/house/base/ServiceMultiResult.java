@@ -1,7 +1,6 @@
 package com.example.house.base;
 
 import java.util.List;
-
 public class ServiceMultiResult<T> {
     private long total;
     private List<T> result;

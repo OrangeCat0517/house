@@ -1,7 +1,7 @@
-package com.example.house.service.impl;
+package com.example.house.service.users.impl;
 
 
-import com.example.house.service.ISmsService;
+import com.example.house.service.users.ISmsService;
 import com.example.house.base.ServiceResult;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.springframework.beans.factory.annotation.Autowired;

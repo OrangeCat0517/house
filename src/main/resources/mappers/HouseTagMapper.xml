@@ -14,4 +14,7 @@
             #{id}
         </foreach>
     </select>
+    <insert id="save" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        insert into house_tag (house_id, name) values (#{house_id}, #{name})
+    </insert>
 </mapper>

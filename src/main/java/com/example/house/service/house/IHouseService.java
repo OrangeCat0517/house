@@ -9,8 +9,6 @@ import com.example.house.form.HouseForm;
 import com.example.house.form.MapSearch;
 import com.example.house.form.RentSearch;
 
-import java.util.Date;
-
 public interface IHouseService {
 
     ServiceResult<HouseDTO> save(HouseForm houseForm);

@@ -11,4 +11,5 @@ public interface HouseTagMapper {
     HouseTag findByNameAndHouseId(@Param("name") String name, @Param("houseId") Long houseId);
     List<HouseTag> findAllByHouseId(Long id);
     List<HouseTag> findAllByHouseIdIn(List<Long> houseIds);
+    int save(List<HouseTag> houseTags);
 }

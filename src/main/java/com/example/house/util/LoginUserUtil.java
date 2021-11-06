@@ -21,7 +21,6 @@ public class LoginUserUtil {
             return EMAIL_PATTERN.matcher(target).matches();
     }
 
-
     private static User load() {
         //读取一个用户
         Object principal =

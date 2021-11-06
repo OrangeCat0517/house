@@ -3,7 +3,7 @@ package com.example.house.controller.user;
 import com.example.house.base.ApiResponse;
 import com.example.house.base.ServiceResult;
 import com.example.house.util.LoginUserUtil;
-import com.example.house.service.IUserService;
+import com.example.house.service.users.IUserService;
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

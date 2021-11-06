@@ -1,9 +1,9 @@
-package com.example.house.service.impl;
+package com.example.house.service.house.impl;
 
 import java.io.File;
 import java.io.InputStream;
 
-import com.example.house.service.IQiNiuService;
+import com.example.house.service.house.IQiNiuService;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

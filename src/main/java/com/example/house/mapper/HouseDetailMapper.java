@@ -9,4 +9,5 @@ import org.apache.ibatis.annotations.Mapper;
 public interface HouseDetailMapper {
     HouseDetail findByHouseId(Long houseId);
     List<HouseDetail> findAllByHouseIdIn(List<Long> houseIds);
+    void save(HouseDetail houseDetail);
 }

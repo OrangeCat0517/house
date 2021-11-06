@@ -1,4 +1,4 @@
-package com.example.house.service;
+package com.example.house.service.house;
 
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;

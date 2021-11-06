@@ -39,9 +39,14 @@ public class ServiceResult<T> {
     }
 
 
+
     public static <T> ServiceResult<T> success() {
         return new ServiceResult<>(true);
     }
+    public static <T> ServiceResult<T> success(String message, T result) {
+        return new ServiceResult<>(true, message, result);
+    }
+
 
     public static <T> ServiceResult<T> notFound() {
         return new ServiceResult<>(

@@ -24,7 +24,8 @@ public interface IAddressService {
      * @param regionEnName
      * @return
      */
-    Map<SupportAddress.Level, SupportAddressDTO> findCityAndRegion(String cityEnName, String regionEnName);
+    Map<SupportAddress.Level, SupportAddressDTO>
+    findCityAndRegion(String cityEnName, String regionEnName);
 
     /**
      * 根据城市英文简写获取该城市所有支持的区域信息

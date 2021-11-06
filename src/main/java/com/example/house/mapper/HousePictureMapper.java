@@ -8,4 +8,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface HousePictureMapper {
     List<HousePicture> findAllByHouseId(Long id);
+    int save(List<HousePicture> housePictures);
 }
