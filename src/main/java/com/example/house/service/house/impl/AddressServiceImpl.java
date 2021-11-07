@@ -58,6 +58,7 @@ public class AddressServiceImpl implements IAddressService {
 
     private static final String BAIDU_MAP_GEOCONV_API = "http://api.map.baidu.com/geocoder/v2/?";
 
+    
     /**
      * POI数据管理接口
      */
