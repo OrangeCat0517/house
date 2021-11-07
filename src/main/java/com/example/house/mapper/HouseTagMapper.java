@@ -12,4 +12,5 @@ public interface HouseTagMapper {
     List<HouseTag> findAllByHouseId(Long id);
     List<HouseTag> findAllByHouseIdIn(List<Long> houseIds);
     int save(List<HouseTag> houseTags);
+    int delete(Long id);
 }

@@ -23,16 +23,16 @@ public class ServiceResult<T> {
     private ServiceResult() {
     }
 
-    private ServiceResult(boolean success) {
+    public ServiceResult(boolean success) {
         this.success = success;
     }
 
-    private ServiceResult(boolean success, String message) {
+    public ServiceResult(boolean success, String message) {
         this.success = success;
         this.message = message;
     }
 
-    private ServiceResult(boolean success, String message, T result) {
+    public ServiceResult(boolean success, String message, T result) {
         this.success = success;
         this.message = message;
         this.result = result;

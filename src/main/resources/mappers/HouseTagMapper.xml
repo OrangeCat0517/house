@@ -7,14 +7,19 @@
     <select id="findAllByHouseId" resultType="com.example.house.domain.HouseTag">
         select * from house_tag where id=#{id}
     </select>
-
     <select id="findAllByHouseIdIn" resultType="com.example.house.domain.HouseTag">
         select * from house_tag where id in
         <foreach item="id"  collection="houseIds" open="(" separator="," close=")">
             #{id}
         </foreach>
     </select>
-    <insert id="save" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
-        insert into house_tag (house_id, name) values (#{house_id}, #{name})
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        insert into house_tag (house_id, name) values
+        <foreach collection="houseTags" item="houseTag" separator=", ">
+            (#{houseTag.houseId}, #{houseTag.name})
+        </foreach>
     </insert>
+    <delete id="delete">
+        delete from house_tag where id=#{id}
+    </delete>
 </mapper>

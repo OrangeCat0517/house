@@ -9,4 +9,6 @@ import org.apache.ibatis.annotations.Mapper;
 public interface HousePictureMapper {
     List<HousePicture> findAllByHouseId(Long id);
     int save(List<HousePicture> housePictures);
+    HousePicture findOne(Long id);
+    int delete(Long id);
 }

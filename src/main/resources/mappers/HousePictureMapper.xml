@@ -1,13 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.house.mapper.HousePictureMapper">
-    <select id="" resultType="com.example.house.domain.HousePicture">
+    <resultMap id="housePicture" type="com.example.house.domain.HousePicture">
+        <id property="id" column="id"/>
+        <result property="houseId" column="house_id"/>
+        <result property="path" column="path"/>
+        <result property="width" column="width"/>
+        <result property="height" column="height"/>
+        <result property="location" column="location"/>
+        <result property="cdnPrefix" column="cdn_prefix"/>
+    </resultMap>
+    <select id="findAllByHouseId" resultMap="housePicture">
         select * from house_picture where house_id = #{id}
     </select>
-    <insert id="save" parameterType="java.util.List" keyProperty="id" useGeneratedKeys="true">
-        insert into house_picture(house_id, cdn_prefix, width, height, location, path)
-        values <foreach collection="housePictures" item="housePicture" separator=", ">
-        (#{houseId},#{cdnPrefix},#{width},#{height},#{location},#{path})
-    </foreach>
+    <insert id="save" keyProperty="id" useGeneratedKeys="true">
+        insert into house_picture(house_id, cdn_prefix, width, height, location, path) values
+        <foreach collection="housePictures" item="housePicture" separator=", ">
+            (#{housePicture.houseId},#{housePicture.cdnPrefix},#{housePicture.width},#{housePicture.height},#{housePicture.location},#{housePicture.path})
+        </foreach>
     </insert>
+    <select id="findOne" resultMap="housePicture">
+        select * from house_picture where id = #{id}
+    </select>
+    <delete id="delete">
+        delete from house_picture where id=#{id}
+    </delete>
 </mapper>

@@ -41,6 +41,7 @@ public class HouseForm {
     private Integer room;
 
     private int parlour;
+    private int bathroom;
 
     @NotNull(message = "必须填写所属楼层")
     private Integer floor;

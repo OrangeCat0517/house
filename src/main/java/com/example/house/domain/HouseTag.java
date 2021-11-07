@@ -12,4 +12,5 @@ public class HouseTag {
         this.houseId = houseId;
         this.name = name;
     }
+
 }

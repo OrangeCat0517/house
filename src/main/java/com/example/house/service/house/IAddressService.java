@@ -9,6 +9,7 @@ import com.example.house.domain.SupportAddress;
 import com.example.house.dto.SubwayDTO;
 import com.example.house.dto.SubwayStationDTO;
 import com.example.house.dto.SupportAddressDTO;
+import com.example.house.service.search.BaiduMapLocation;
 
 
 public interface IAddressService {
@@ -67,5 +68,20 @@ public interface IAddressService {
      * @return
      */
     ServiceResult<SupportAddressDTO> findCity(String cityEnName);
+
+    ServiceResult<BaiduMapLocation> getBaiduMapLocation(String city, String address);
+
+    /**
+     * 上传百度LBS数据
+     */
+    ServiceResult lbsUpload(BaiduMapLocation location, String title, String address, long houseId, int price, int area);
+
+    /**
+     * 移除百度LBS数据
+     * @param houseId
+     * @return
+     */
+    public ServiceResult removeLbs(Long houseId);
+
 }
 

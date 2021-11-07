@@ -13,4 +13,6 @@ public interface HouseMapper {
     void updateWatchTimes(@Param(value = "id") Long houseId);
 
     void save(House house);
+
+    House findOne(Long id);
 }

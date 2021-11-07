@@ -1,10 +1,12 @@
 package com.example.house.controller.admin;
 
+import com.example.house.base.ApiDataTableResponse;
 import com.example.house.base.ApiResponse;
 import com.example.house.base.ServiceMultiResult;
 import com.example.house.base.ServiceResult;
 import com.example.house.domain.SupportAddress;
 import com.example.house.dto.*;
+import com.example.house.form.DatatableSearch;
 import com.example.house.form.HouseForm;
 import com.example.house.service.house.IAddressService;
 import com.example.house.service.house.IHouseService;
@@ -117,6 +119,25 @@ public class AdminController {
         } catch (IOException e) {
             return ApiResponse.ofStatus(ApiResponse.Status.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("admin/house/list")
+    public String houseListPage() {
+        return "admin/house-list";
+    }
+
+    @PostMapping("admin/houses")
+    @ResponseBody
+    public ApiDataTableResponse houses(@ModelAttribute DatatableSearch searchBody) {
+        ServiceMultiResult<HouseDTO> result = houseService.adminQuery(searchBody);
+
+        ApiDataTableResponse response = new ApiDataTableResponse(ApiResponse.Status.SUCCESS);
+        response.setData(result.getResult());
+        response.setRecordsFiltered(result.getTotal());
+        response.setRecordsTotal(result.getTotal());
+
+        response.setDraw(searchBody.getDraw());
+        return response;
     }
 
     /**

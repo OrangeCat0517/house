@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.house.mapper.HouseMapper">
+    <resultMap id="houseResultMap" type="com.example.house.domain.House">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="admin_id" property="adminId"/>
+        <result column="price" property="price"/>
+        <result column="area" property="area"/>
+        <result column="room" property="room"/>
+        <result column="floor" property="floor"/>
+        <result column="total_floor" property="totalFloor"/>
+        <result column="watch_times" property="watchTimes"/>
+        <result column="build_year" property="buildYear"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="last_update_time" property="lastUpdateTime"/>
+        <result column="city_en_name" property="cityEnName"/>
+        <result column="region_en_name" property="regionEnName"/>
+        <result column="street" property="street"/>
+        <result column="district" property="district"/>
+        <result column="direction" property="direction"/>
+        <result column="cover" property="cover"/>
+        <result column="distance_to_subway" property="distanceToSubway"/>
+        <result column="bathroom" property="bathroom"/>
+        <result column="parlour" property="parlour"/>
+    </resultMap>
     <update id="updateCover">
         update house set cover=#{cover} where id = #{id}
     </update>
@@ -10,9 +34,12 @@
     <update id="updateWatchTimes">
         update house set  watch_times=now() where id = #{houseId}
     </update>
-
     <insert id="save" parameterType="com.example.house.domain.House" useGeneratedKeys="true" keyProperty="id">
         insert into house(title, price, area, room, floor, total_floor, watch_times, build_year, status, create_time, last_update_time, city_en_name, region_en_name, cover, direction, distance_to_subway, parlour, district, admin_id, bathroom, street)
-        VALUES (#{title}, #{price}, #{area}, #{room},#{floor},#{totalFloor},#{watchTimes},#{buildYear},#{status},#{createTime},#{lastUpdateTime},#{cityEnName},#{regionEnName},#{cover}, #{direction},#{distanceToSubway},#{parlour},#{district},#{adminId},#{bathroom},#{street})
+        VALUES (#{title}, #{price}, #{area}, #{room},#{floor},#{totalFloor},#{watchTimes},#{buildYear},1,now(), now(),#{cityEnName},#{regionEnName},#{cover}, #{direction},#{distanceToSubway},#{parlour},#{district},#{adminId},#{bathroom},#{street})
     </insert>
+
+    <select id="findOne" resultMap="houseResultMap">
+        select * from house where id = #{id}
+    </select>
 </mapper>

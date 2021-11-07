@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.house.mapper.SubwayMapper">
-    <select id="findAllByCityEnName" resultType="com.example.house.domain.Subway">
+    <resultMap id="subwayResultMapper" type="com.example.house.domain.Subway">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="city_en_name" property="cityEnName" />
+    </resultMap>
+    <select id="findAllByCityEnName" resultMap="subwayResultMapper">
         select * from subway where city_en_name = #{cityEnName}
     </select>
 
-    <select id="findOne" resultType="com.example.house.domain.Subway">
+    <select id="findOne" resultMap="subwayResultMapper">
         select * from subway where id = #{subwayId}
     </select>
 </mapper>

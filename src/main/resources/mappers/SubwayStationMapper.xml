@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.house.mapper.SubwayStationMapper">
-    <select id="findAllBySubwayId" resultType="com.example.house.domain.SubwayStation">
+    <resultMap id="subwayStationResultMapper" type="com.example.house.domain.SubwayStation">
+        <id property="id" column="id"/>
+        <result property="subwayId" column="subway_id"/>
+        <result property="name" column="name"/>
+    </resultMap>
+    <select id="findAllBySubwayId" resultMap="subwayStationResultMapper">
         select * from subway_station where  subway_id = #{subwayId}
     </select>
-    <select id="findOne" resultType="com.example.house.domain.SubwayStation">
-        select * from subway_station where  subway_id = #{subwayId}
+    <select id="findOne" resultMap="subwayStationResultMapper">
+        select * from subway_station where id = #{subwaystationId}
     </select>
 </mapper>
