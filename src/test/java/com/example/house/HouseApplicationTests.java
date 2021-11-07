@@ -31,7 +31,7 @@ class HouseApplicationTests {
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
-    private IAddressService iAddressService;
+    private IAddressService addressService;
     @Autowired
     private IQiNiuService qiNiuService;
     @Autowired
@@ -88,6 +88,6 @@ class HouseApplicationTests {
 
     @Test
     void addressService() {
-        iAddressService.findAllCities().getResult().forEach(System.out::println);
+        addressService.findAllCities().getResult().forEach(System.out::println);
     }
 }

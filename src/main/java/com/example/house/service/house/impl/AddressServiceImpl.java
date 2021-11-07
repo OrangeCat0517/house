@@ -207,6 +207,7 @@ public class AddressServiceImpl implements IAddressService {
 
             String result = EntityUtils.toString(response.getEntity(), "UTF-8");
             JsonNode jsonNode = objectMapper.readTree(result);
+            //将这个字符串变成便于操纵的JSONNODE
             int status = jsonNode.get("status").asInt();
             if (status != 0) {
                 return new ServiceResult<BaiduMapLocation>(false, "Error to get map location for status: " + status);

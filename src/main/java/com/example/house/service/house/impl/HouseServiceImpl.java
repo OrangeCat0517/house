@@ -8,16 +8,15 @@ import java.util.Map;
 
 
 import com.example.house.base.HouseStatus;
+import com.example.house.base.HouseSubscribeStatus;
 import com.example.house.base.ServiceMultiResult;
 import com.example.house.base.ServiceResult;
 import com.example.house.domain.*;
 import com.example.house.dto.HouseDTO;
 import com.example.house.dto.HouseDetailDTO;
 import com.example.house.dto.HousePictureDTO;
-import com.example.house.form.DatatableSearch;
-import com.example.house.form.HouseForm;
-import com.example.house.form.PhotoForm;
-import com.example.house.form.RentSearch;
+import com.example.house.dto.HouseSubscribeDTO;
+import com.example.house.form.*;
 import com.example.house.mapper.*;
 import com.example.house.service.house.IQiNiuService;
 import com.example.house.service.house.IHouseService;
@@ -27,9 +26,9 @@ import com.qiniu.http.Response;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 @Service
 public class HouseServiceImpl implements IHouseService {
@@ -66,7 +65,8 @@ public class HouseServiceImpl implements IHouseService {
     public ServiceResult<HouseDTO> save(HouseForm houseForm) {
         System.out.println("house form:" + houseForm);
         HouseDetail detail = new HouseDetail();
-        ServiceResult<HouseDTO> subwayValidationResult = wrapperDetailInfo(detail, houseForm);
+        ServiceResult<HouseDTO> subwayValidationResult
+                = wrapperDetailInfo(detail, houseForm);
         if (subwayValidationResult != null) {
             return subwayValidationResult;
         }
@@ -143,11 +143,6 @@ public class HouseServiceImpl implements IHouseService {
     }
 
     @Override
-    public ServiceMultiResult<HouseDTO> adminQuery(DatatableSearch searchBody) {
-        return null;
-    }
-
-    @Override
     public ServiceResult<HouseDTO> findCompleteOne(Long id) {
         House house = houseMapper.findOne(id);
         if (house == null) {
@@ -177,12 +172,10 @@ public class HouseServiceImpl implements IHouseService {
         result.setTags(tagList);
 
         return ServiceResult.of(result);
-
     }
 
     @Override
     public ServiceResult removePhoto(Long id) {
-
         HousePicture picture = housePictureMapper.findOne(id);
         if (picture == null) {
             return ServiceResult.notFound();
@@ -224,7 +217,6 @@ public class HouseServiceImpl implements IHouseService {
         if (houseTag != null) {
             return new ServiceResult(false, "标签已存在");
         }
-
         houseTagMapper.save(List.of(new HouseTag(houseId, tag)));
         return ServiceResult.success();
     }
@@ -247,7 +239,6 @@ public class HouseServiceImpl implements IHouseService {
 
     @Override
     public ServiceResult updateStatus(Long id, int status) {
-
         House house = houseMapper.findOne(id);
         if (house == null) {
             return ServiceResult.notFound();
@@ -273,6 +264,47 @@ public class HouseServiceImpl implements IHouseService {
     public ServiceMultiResult<HouseDTO> query(RentSearch rentSearch) {
         return null;
     }
+
+    @Override
+    public ServiceMultiResult<HouseDTO> wholeMapQuery(MapSearch mapSearch) {
+        return null;
+    }
+
+    @Override
+    public ServiceMultiResult<HouseDTO> boundMapQuery(MapSearch mapSearch) {
+        return null;
+    }
+
+    @Override
+    public ServiceResult addSubscribeOrder(Long houseId) {
+        return null;
+    }
+
+    @Override
+    public ServiceMultiResult<Pair<HouseDTO, HouseSubscribeDTO>> querySubscribeList(HouseSubscribeStatus status, int start, int size) {
+        return null;
+    }
+
+    @Override
+    public ServiceResult subscribe(Long houseId, LocalDateTime orderTime, String telephone, String desc) {
+        return null;
+    }
+
+    @Override
+    public ServiceResult cancelSubscribe(Long houseId) {
+        return null;
+    }
+
+    @Override
+    public ServiceMultiResult<Pair<HouseDTO, HouseSubscribeDTO>> findSubscribeList(int start, int size) {
+        return null;
+    }
+
+    @Override
+    public ServiceMultiResult<HouseDTO> adminQuery(DatatableSearch searchBody) {
+        return null;
+    }
+
 
 
 
@@ -338,6 +370,4 @@ public class HouseServiceImpl implements IHouseService {
         houseDetail.setTraffic(houseForm.getTraffic());
         return null;
     }
-
-
 }
