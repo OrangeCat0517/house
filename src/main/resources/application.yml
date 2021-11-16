@@ -30,7 +30,7 @@ qiniu:
   SecretKey: oXQsKQPNYZAXnC2MqFjsTElpgxJThsiGolUVekZW
   Bucket: pengsuen
   cdn:
-    prefix: http://7xo6gy.com1.z0.glb.clouddn.com/
+    prefix: http://r1dt1u4iy.hb-bkt.clouddn.com
 
 logging:
   level:

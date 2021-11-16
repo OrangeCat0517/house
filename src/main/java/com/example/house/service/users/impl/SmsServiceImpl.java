@@ -19,7 +19,8 @@ import java.util.concurrent.TimeUnit;
 public class SmsServiceImpl implements ISmsService {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
-    private final static String SMS_CODE_CONTENT_PREFIX = "SMS::CODE::CONTENT";
+    private final static String SMS_CODE_CONTENT_PREFIX = "SMS::CODE::CONTENT::";
+
     private static String generateRandomSmsCode() {
         Random random = new Random();
         StringBuilder sb = new StringBuilder();
@@ -27,6 +28,7 @@ public class SmsServiceImpl implements ISmsService {
             sb.append(random.nextInt(10));
         return sb.toString();
     }
+
     @Override
     public String getSmsCode(String telephone) {
         return redisTemplate.opsForValue().get(SMS_CODE_CONTENT_PREFIX + telephone);

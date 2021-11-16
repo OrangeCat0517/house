@@ -38,7 +38,7 @@ public class UserServiceImpl implements IUserService {
         User user = userMapper.findByName(userName);
         if(user == null) return null;
 
-        List<Role> roles = roleMapper.findRolesByUserId(user.getId());//ADMIN  USER
+        List<Role> roles =roleMapper.findRolesByUserId(user.getId());//ADMIN  USER
         if (roles == null || roles.isEmpty()) {
             throw new DisabledException("权限非法");
         }
@@ -87,8 +87,7 @@ public class UserServiceImpl implements IUserService {
     public User addUserByPhone(String telephone) {
         User user = new User();
         user.setPhoneNumber(telephone);
-        user.setName(telephone.substring(0, 3) + "****" +
-                telephone.substring(7));
+        user.setName(telephone.substring(0, 3) + "****" + telephone.substring(7));
         user.setStatus(0); //0-启用 1-禁用
         LocalDateTime now = LocalDateTime.now();
         user.setCreateTime(now);
