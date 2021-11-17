@@ -2,9 +2,9 @@ package com.example.house.service.house.impl;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 
 import com.example.house.base.HouseStatus;
@@ -26,7 +26,10 @@ import com.qiniu.http.Response;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+
+import org.springframework.data.domain.*;
 import org.springframework.data.util.Pair;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -261,6 +264,22 @@ public class HouseServiceImpl implements IHouseService {
     }
 
     @Override
+    public ServiceMultiResult<HouseDTO> adminQuery(DatatableSearch searchBody) {
+        List<HouseDTO> houseDTOS = new ArrayList<>();
+//        Sort sort = Sort.by(Sort.Direction.fromString(searchBody.getDirection()), searchBody.getOrderBy());
+//        int page = searchBody.getStart() / searchBody.getLength();
+//        Pageable pageable = PageRequest.of(page, searchBody.getLength(), sort);
+        List<House> houses = houseMapper.findAll();
+        houses.forEach(house -> {
+            HouseDTO houseDTO = modelMapper.map(house, HouseDTO.class);
+            houseDTO.setCover(this.cdnPrefix + house.getCover());
+            houseDTOS.add(houseDTO);
+        });
+
+        return new ServiceMultiResult<>(houses.size(), houseDTOS);
+    }
+
+    @Override
     public ServiceMultiResult<HouseDTO> query(RentSearch rentSearch) {
         return null;
     }
@@ -300,10 +319,7 @@ public class HouseServiceImpl implements IHouseService {
         return null;
     }
 
-    @Override
-    public ServiceMultiResult<HouseDTO> adminQuery(DatatableSearch searchBody) {
-        return null;
-    }
+
 
 
 

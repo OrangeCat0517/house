@@ -3,6 +3,7 @@ package com.example.house;
 import com.example.house.domain.HouseTag;
 import com.example.house.form.HouseForm;
 import com.example.house.form.PhotoForm;
+import com.example.house.mapper.HouseTagMapper;
 import com.example.house.service.house.IAddressService;
 import com.example.house.service.house.IHouseService;
 import com.example.house.service.house.IQiNiuService;
@@ -21,6 +22,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
@@ -36,6 +38,19 @@ class HouseApplicationTests {
     private IQiNiuService qiNiuService;
     @Autowired
     private IHouseService houseService;
+    @Autowired
+    private HouseTagMapper houseTagMapper;
+
+    @Test
+    void saveTags() {
+        List<HouseTag> houseTags = new ArrayList<>();
+        houseTags.add(new HouseTag(15L, "基金提供怒"));
+        houseTags.add(new HouseTag(15L, "基金提供怒1"));
+        houseTags.add(new HouseTag(15L, "基金提供怒2"));
+        houseTags.forEach(System.out::println);
+        houseTagMapper.save(houseTags);
+        houseTags.forEach(System.out::println);
+    }
 
     @Test
     void saveHouse() {

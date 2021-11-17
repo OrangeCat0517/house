@@ -1,6 +1,3 @@
-/**
- * Created by 瓦力.
- */
 // 【关键】数据显示控制 服务器分页
 var table = $('#data-table').DataTable({
     "order": [[7, "desc"]],//默认创建时间排序

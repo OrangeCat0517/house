@@ -42,4 +42,8 @@
     <select id="findOne" resultMap="houseResultMap">
         select * from house where id = #{id}
     </select>
+
+    <select id="findAll" resultMap="houseResultMap">
+        select * from house
+    </select>
 </mapper>
