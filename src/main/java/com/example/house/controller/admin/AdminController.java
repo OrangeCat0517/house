@@ -166,7 +166,6 @@ public class AdminController {
         if (result.isSuccess()) {
             return ApiResponse.ofSuccess(result.getResult());
         }
-
         return ApiResponse.ofSuccess(ApiResponse.Status.NOT_VALID_PARAM);
     }
 
