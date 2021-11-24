@@ -19,18 +19,31 @@ import com.example.house.service.search.ISearchService;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.elasticsearch.action.ActionType;
+import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.search.SearchType;
+import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
+import org.elasticsearch.client.IndicesClient;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.client.indices.CreateIndexRequest;
+import org.elasticsearch.client.indices.CreateIndexResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.reindex.BulkByScrollResponse;
 import org.elasticsearch.index.reindex.DeleteByQueryAction;
+import org.elasticsearch.index.reindex.DeleteByQueryRequest;
 import org.elasticsearch.index.reindex.DeleteByQueryRequestBuilder;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.script.mustache.SearchTemplateRequestBuilder;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,8 +71,11 @@ public class SearchServiceImpl implements ISearchService {
     private HouseDetailMapper houseDetailMapper;
     @Autowired
     private HouseTagMapper houseTagMapper;
+//    @Autowired
+//    private TransportClient transportClient;
+
     @Autowired
-    private TransportClient transportClient;
+    private RestHighLevelClient restHighLevelClient;
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
@@ -112,9 +128,23 @@ public class SearchServiceImpl implements ISearchService {
             houseTags.forEach(houseTag -> houseTagsString.add(houseTag.getName()));
             houseIndexTemplate.setTags(houseTagsString);
         }
-        SearchRequestBuilder searchRequestBuilder = transportClient.prepareSearch(INDEX_NAME).setSearchType(INDEX_TYPE)
-                .setQuery(QueryBuilders.termQuery(HouseIndexKey.HOUSE_ID, houseId));
-        SearchResponse searchResponse = searchRequestBuilder.get();
+//        SearchRequestBuilder searchRequestBuilder = transportClient.prepareSearch(INDEX_NAME).setSearchType(INDEX_TYPE)
+//                .setQuery(QueryBuilders.termQuery(HouseIndexKey.HOUSE_ID, houseId)); //ES6
+
+        SearchRequest searchRequest = new SearchRequest(INDEX_NAME);
+        SearchType searchType = SearchType.fromString(INDEX_TYPE);
+        QueryBuilder queryBuilder = QueryBuilders.termQuery(HouseIndexKey.HOUSE_ID, houseId);
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+        sourceBuilder.query(queryBuilder);
+        searchRequest.source(sourceBuilder);
+        searchRequest.searchType(searchType);
+
+        SearchResponse searchResponse = null;
+        try {
+            searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         long totalHit = searchResponse.getHits().getTotalHits().value;
         boolean success;
         if (totalHit == 0) {
@@ -149,12 +179,17 @@ public class SearchServiceImpl implements ISearchService {
 
     private boolean create(HouseIndexTemplate houseIndexTemplate) {
         try {
-            IndexResponse indexResponse = transportClient.prepareIndex(INDEX_NAME, INDEX_TYPE)
-                    .setSource(objectMapper.writeValueAsBytes(houseIndexTemplate)).get();
-            logger.debug("Create index with house: " + houseIndexTemplate.getHouseId());
-            if (indexResponse.status() == RestStatus.CREATED)
+//            IndexResponse indexResponse = transportClient.prepareIndex(INDEX_NAME, INDEX_TYPE)
+//                    .setSource(objectMapper.writeValueAsBytes(houseIndexTemplate)).get();
+
+            IndexRequest indexRequest = new IndexRequest(INDEX_NAME)
+                    .source(objectMapper.writeValueAsBytes(houseIndexTemplate));
+            IndexResponse response =
+                    restHighLevelClient.index(indexRequest, RequestOptions.DEFAULT);
+
+            if (response.status() == RestStatus.CREATED)
                 return true;
-        } catch (JsonProcessingException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return false;
@@ -163,21 +198,36 @@ public class SearchServiceImpl implements ISearchService {
 
     private boolean update(String esId, HouseIndexTemplate houseIndexTemplate) {
         try {
-            UpdateResponse indexResponse = transportClient.prepareUpdate(INDEX_NAME, INDEX_TYPE, esId)
-                    .setDoc(objectMapper.writeValueAsBytes(houseIndexTemplate)).get();
+//            UpdateResponse indexResponse = transportClient.prepareUpdate(INDEX_NAME, INDEX_TYPE, esId)
+//                    .setDoc(objectMapper.writeValueAsBytes(houseIndexTemplate)).get();  //ES 6
+
+            UpdateRequest updateRequest = new UpdateRequest(INDEX_NAME, esId)
+                            .doc(objectMapper.writeValueAsBytes(houseIndexTemplate));
+            UpdateResponse updateResponse
+                    = restHighLevelClient.update(updateRequest, RequestOptions.DEFAULT);
+
             logger.debug("Create index with house: " + houseIndexTemplate.getHouseId());
-            if (indexResponse.status() == RestStatus.OK)
+            if (updateResponse.status() == RestStatus.OK)
                 return true;
-        } catch (JsonProcessingException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return false;
     }
 
     private boolean deleteAndCreate(long totalHit, HouseIndexTemplate houseIndexTemplate) {
-        DeleteByQueryRequestBuilder deleteByQueryRequestBuilder = new DeleteByQueryRequestBuilder(
-                transportClient, DeleteByQueryAction.INSTANCE).filter(QueryBuilders.termQuery(HouseIndexKey.HOUSE_ID, houseIndexTemplate.getHouseId())).source(INDEX_NAME);
-        BulkByScrollResponse bulkByScrollResponse = deleteByQueryRequestBuilder.get();
+//        DeleteByQueryRequestBuilder deleteByQueryRequestBuilder = new DeleteByQueryRequestBuilder(
+//                transportClient, DeleteByQueryAction.INSTANCE)
+//                .filter(QueryBuilders.termQuery(HouseIndexKey.HOUSE_ID, houseIndexTemplate.getHouseId()))
+//                .source(INDEX_NAME);   //ES 6
+        DeleteByQueryRequest deleteByQueryRequest = new DeleteByQueryRequest(INDEX_NAME);
+        deleteByQueryRequest.setQuery(QueryBuilders.termQuery(HouseIndexKey.HOUSE_ID, houseIndexTemplate.getHouseId()));
+        BulkByScrollResponse bulkByScrollResponse = null;
+        try {
+            bulkByScrollResponse = restHighLevelClient.deleteByQuery(deleteByQueryRequest, RequestOptions.DEFAULT);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         long delete = bulkByScrollResponse.getDeleted();
         if (delete != totalHit)
             return false;

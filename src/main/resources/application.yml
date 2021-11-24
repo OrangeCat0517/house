@@ -20,6 +20,9 @@ spring:
     bootstrap-servers: localhost:8902
     consumer:
       group-id: house
+  data:
+    elasticsearch:
+      cluster-name:
 
 
 
