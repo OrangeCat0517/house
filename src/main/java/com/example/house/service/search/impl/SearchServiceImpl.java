@@ -35,6 +35,8 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 
@@ -60,24 +62,52 @@ public class SearchServiceImpl implements ISearchService {
     private TransportClient transportClient;
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private KafkaTemplate<String, String> kafkaTemplate;
 
+    @KafkaListener(topics = INDEX_TOPIC)
+    private void handleMessage(String content) {
+        try {
+            HouseIndexMessage houseIndexMessage = objectMapper.readValue(content, HouseIndexMessage.class);
+            switch (houseIndexMessage.getOperation()) {
+                case HouseIndexMessage.INDEX:
+                    this.createOrUpdateIndex(houseIndexMessage);
+                    break;
+                case HouseIndexMessage.REMOVE:
+                    this.removeIndex(houseIndexMessage);
+                    break;
+                default:
+                    logger.warn("not support message content");
+                    break;
+            }
+        } catch (JsonProcessingException e) {
+            logger.error("cannot parse json for " + content, e);
+        }
+    }
 
-    @Override
-    public void index(Long houseId) {
+    //主要为了处理kafka
+    private void removeIndex(HouseIndexMessage houseIndexMessage) {
+
+    }
+
+    //主要为了处理kafka
+    private void createOrUpdateIndex(HouseIndexMessage houseIndexMessage) {
+        long houseId = houseIndexMessage.getHouseId();
         House house = houseMapper.findOne(houseId);
-        if(house == null) {
+        if (house == null) {
             logger.error("Index house {} dose not exist!", houseId);
+            this.index(houseId, houseIndexMessage.getRetry() + 1);
         }
         HouseIndexTemplate houseIndexTemplate = new HouseIndexTemplate();
         modelMapper.map(house, houseIndexTemplate);
 
         HouseDetail houseDetail = houseDetailMapper.findByHouseId(houseId);
-        if(houseDetail == null) {
+        if (houseDetail == null) {
             //exception
         }
         modelMapper.map(houseDetail, houseIndexTemplate);
         List<HouseTag> houseTags = houseTagMapper.findAllByHouseId(houseId);
-        if(houseTags != null && !houseTags.isEmpty()) {
+        if (houseTags != null && !houseTags.isEmpty()) {
             List<String> houseTagsString = new ArrayList<>();
             houseTags.forEach(houseTag -> houseTagsString.add(houseTag.getName()));
             houseIndexTemplate.setTags(houseTagsString);
@@ -87,16 +117,33 @@ public class SearchServiceImpl implements ISearchService {
         SearchResponse searchResponse = searchRequestBuilder.get();
         long totalHit = searchResponse.getHits().getTotalHits().value;
         boolean success;
-        if(totalHit == 0) {
+        if (totalHit == 0) {
             success = create(houseIndexTemplate);
-        } else if(totalHit == 1) {
+        } else if (totalHit == 1) {
             String esId = searchResponse.getHits().getAt(0).getId();
             success = update(esId, houseIndexTemplate);
         } else {
             success = deleteAndCreate(totalHit, houseIndexTemplate);
         }
-        if(success) {
+        if (success) {
             logger.debug("");
+        }
+    }
+
+    @Override
+    public void index(Long houseId) {
+        this.index(houseId, 0);
+    }
+
+    private void index(Long houseId, int retry) {
+        if(retry> HouseIndexMessage.MAX_RETRY) {
+            logger.error("retry index times over 3 for house");
+        }
+        HouseIndexMessage houseIndexMessage = new HouseIndexMessage(houseId, HouseIndexMessage.INDEX, retry);
+        try {
+            this.kafkaTemplate.send(INDEX_TOPIC, objectMapper.writeValueAsString(houseIndexMessage));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
         }
     }
 
@@ -105,7 +152,7 @@ public class SearchServiceImpl implements ISearchService {
             IndexResponse indexResponse = transportClient.prepareIndex(INDEX_NAME, INDEX_TYPE)
                     .setSource(objectMapper.writeValueAsBytes(houseIndexTemplate)).get();
             logger.debug("Create index with house: " + houseIndexTemplate.getHouseId());
-            if(indexResponse.status() == RestStatus.CREATED)
+            if (indexResponse.status() == RestStatus.CREATED)
                 return true;
         } catch (JsonProcessingException e) {
             e.printStackTrace();
@@ -113,24 +160,26 @@ public class SearchServiceImpl implements ISearchService {
         return false;
 
     }
+
     private boolean update(String esId, HouseIndexTemplate houseIndexTemplate) {
         try {
             UpdateResponse indexResponse = transportClient.prepareUpdate(INDEX_NAME, INDEX_TYPE, esId)
                     .setDoc(objectMapper.writeValueAsBytes(houseIndexTemplate)).get();
             logger.debug("Create index with house: " + houseIndexTemplate.getHouseId());
-            if(indexResponse.status() == RestStatus.OK)
+            if (indexResponse.status() == RestStatus.OK)
                 return true;
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
         return false;
     }
+
     private boolean deleteAndCreate(long totalHit, HouseIndexTemplate houseIndexTemplate) {
         DeleteByQueryRequestBuilder deleteByQueryRequestBuilder = new DeleteByQueryRequestBuilder(
                 transportClient, DeleteByQueryAction.INSTANCE).filter(QueryBuilders.termQuery(HouseIndexKey.HOUSE_ID, houseIndexTemplate.getHouseId())).source(INDEX_NAME);
         BulkByScrollResponse bulkByScrollResponse = deleteByQueryRequestBuilder.get();
         long delete = bulkByScrollResponse.getDeleted();
-        if(delete != totalHit)
+        if (delete != totalHit)
             return false;
         else return create(houseIndexTemplate);
     }

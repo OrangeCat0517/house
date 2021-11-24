@@ -16,6 +16,10 @@ spring:
       pool:
         min-idle: 1
     timeout: 3000
+  kafka:
+    bootstrap-servers: localhost:8902
+    consumer:
+      group-id: house
 
 
 
