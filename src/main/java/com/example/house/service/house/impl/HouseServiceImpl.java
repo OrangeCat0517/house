@@ -263,8 +263,26 @@ public class HouseServiceImpl implements IHouseService {
         return ServiceResult.success();
     }
 
+    //管理员查询房子会得到的结果
     @Override
     public ServiceMultiResult<HouseDTO> adminQuery(DatatableSearch searchBody) {
+        List<HouseDTO> houseDTOS = new ArrayList<>();
+//        Sort sort = Sort.by(Sort.Direction.fromString(searchBody.getDirection()), searchBody.getOrderBy());
+//        int page = searchBody.getStart() / searchBody.getLength();
+//        Pageable pageable = PageRequest.of(page, searchBody.getLength(), sort);
+        List<House> houses = houseMapper.findbyDatatableSearch(searchBody);
+        houses.forEach(house -> {
+            HouseDTO houseDTO = modelMapper.map(house, HouseDTO.class);
+            houseDTO.setCover(this.cdnPrefix + "/" + house.getCover());
+            houseDTOS.add(houseDTO);
+        });
+
+        return new ServiceMultiResult<>(houses.size(), houseDTOS);
+    }
+
+    //普通用户查询房子会得到的结果
+    @Override
+    public ServiceMultiResult<HouseDTO> query(RentSearch rentSearch) {
         List<HouseDTO> houseDTOS = new ArrayList<>();
 //        Sort sort = Sort.by(Sort.Direction.fromString(searchBody.getDirection()), searchBody.getOrderBy());
 //        int page = searchBody.getStart() / searchBody.getLength();
@@ -277,11 +295,6 @@ public class HouseServiceImpl implements IHouseService {
         });
 
         return new ServiceMultiResult<>(houses.size(), houseDTOS);
-    }
-
-    @Override
-    public ServiceMultiResult<HouseDTO> query(RentSearch rentSearch) {
-        return null;
     }
 
     @Override
@@ -318,10 +331,6 @@ public class HouseServiceImpl implements IHouseService {
     public ServiceMultiResult<Pair<HouseDTO, HouseSubscribeDTO>> findSubscribeList(int start, int size) {
         return null;
     }
-
-
-
-
 
 
 

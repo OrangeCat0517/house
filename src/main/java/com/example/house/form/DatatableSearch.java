@@ -27,5 +27,5 @@ public class DatatableSearch {
     private String city;
     private String title;
     private String direction;
-    private String orderBy;
+    //private String orderBy;
 }

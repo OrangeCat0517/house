@@ -3,6 +3,8 @@ package com.example.house.dto;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -33,9 +35,9 @@ public class HouseDTO implements Serializable {
 
     private int status;
 
-    private Date createTime;
+    private LocalDateTime createTime;
 
-    private Date lastUpdateTime;
+    private LocalDateTime lastUpdateTime;
 
     private String cityEnName;
 

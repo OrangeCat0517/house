@@ -1,9 +1,6 @@
 package com.example.house.controller.admin;
 
-import com.example.house.base.ApiDataTableResponse;
-import com.example.house.base.ApiResponse;
-import com.example.house.base.ServiceMultiResult;
-import com.example.house.base.ServiceResult;
+import com.example.house.base.*;
 import com.example.house.domain.SupportAddress;
 import com.example.house.dto.*;
 import com.example.house.form.DatatableSearch;
@@ -84,6 +81,38 @@ public class AdminController {
         return "admin/house-add";
     }
 
+    @GetMapping("admin/house/show")
+    public String showHouse(@RequestParam(value = "id") Long id, Model model) {
+        if (id == null || id < 1) {
+            return "404";
+        }
+
+        ServiceResult<HouseDTO> serviceResult = houseService.findCompleteOne(id);
+        if (!serviceResult.isSuccess()) {
+            return "404";
+        }
+
+        HouseDTO result = serviceResult.getResult();
+        model.addAttribute("house", result);
+
+        Map<SupportAddress.Level, SupportAddressDTO> addressMap = addressService.findCityAndRegion(result.getCityEnName(), result.getRegionEnName());
+        model.addAttribute("city", addressMap.get(SupportAddress.Level.CITY));
+        model.addAttribute("region", addressMap.get(SupportAddress.Level.REGION));
+
+        HouseDetailDTO detailDTO = result.getHouseDetail();
+        ServiceResult<SubwayDTO> subwayServiceResult = addressService.findSubway(detailDTO.getSubwayLineId());
+        if (subwayServiceResult.isSuccess()) {
+            model.addAttribute("subway", subwayServiceResult.getResult());
+        }
+
+        ServiceResult<SubwayStationDTO> subwayStationServiceResult = addressService.findSubwayStation(detailDTO.getSubwayStationId());
+        if (subwayStationServiceResult.isSuccess()) {
+            model.addAttribute("station", subwayStationServiceResult.getResult());
+        }
+
+        return "admin/house-show";
+    }
+
     /**
      * 上传图片接口
      * @param file
@@ -130,12 +159,12 @@ public class AdminController {
     @ResponseBody
     public ApiDataTableResponse houses(@ModelAttribute DatatableSearch searchBody) {
         ServiceMultiResult<HouseDTO> result = houseService.adminQuery(searchBody);
+        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" + result);
 
         ApiDataTableResponse response = new ApiDataTableResponse(ApiResponse.Status.SUCCESS);
         response.setData(result.getResult());
         response.setRecordsFiltered(result.getTotal());
         response.setRecordsTotal(result.getTotal());
-
         response.setDraw(searchBody.getDraw());
         return response;
     }
@@ -266,6 +295,39 @@ public class AdminController {
         } else {
             return ApiResponse.ofMessage(HttpStatus.BAD_REQUEST.value(), result.getMessage());
         }
+    }
+
+    @PutMapping("admin/house/operate/{id}/{operation}")
+    @ResponseBody
+    public ApiResponse operateHouse(@PathVariable(value = "id") Long id,
+                                    @PathVariable(value = "operation") int operation) {
+        if (id <= 0) {
+            return ApiResponse.ofStatus(ApiResponse.Status.NOT_VALID_PARAM);
+        }
+        ServiceResult result;
+
+        switch (operation) {
+            case HouseOperation.PASS:
+                result = houseService.updateStatus(id, HouseStatus.PASSES.getValue());
+                break;
+            case HouseOperation.PULL_OUT:
+                result = houseService.updateStatus(id, HouseStatus.NOT_AUDITED.getValue());
+                break;
+            case HouseOperation.DELETE:
+                result = houseService.updateStatus(id, HouseStatus.DELETED.getValue());
+                break;
+            case HouseOperation.RENT:
+                result = houseService.updateStatus(id, HouseStatus.RENTED.getValue());
+                break;
+            default:
+                return ApiResponse.ofStatus(ApiResponse.Status.BAD_REQUEST);
+        }
+
+        if (result.isSuccess()) {
+            return ApiResponse.ofSuccess(null);
+        }
+        return ApiResponse.ofMessage(HttpStatus.BAD_REQUEST.value(),
+                result.getMessage());
     }
 
     /**

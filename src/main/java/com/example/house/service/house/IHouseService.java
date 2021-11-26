@@ -31,20 +31,29 @@ public interface IHouseService {
 
     ServiceResult updateStatus(Long id, int status);
 
-
-
-
-
-
-
-
     ServiceMultiResult<HouseDTO> adminQuery(DatatableSearch searchBody);
-    /**
-     * 查询房源信息集
-     * @param rentSearch
-     * @return
-     */
+
     ServiceMultiResult<HouseDTO> query(RentSearch rentSearch);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * 全地图查询
