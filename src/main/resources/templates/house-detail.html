@@ -85,7 +85,7 @@
             <div class="imgContainer layui-carousel" id="overview-photos">
                 <div carousel-item>
                     <div th:each="picture : ${house.pictures}">
-                        <img th:src="${picture.cdnPrefix + picture.path}"/>
+                        <img th:src="${'http://' + picture.cdnPrefix +'/'+ picture.path}"/>
                     </div>
                 </div>
             </div>
@@ -137,7 +137,7 @@
                     <a href="/zufang/chaoyang/" th:text="${region.cnName}">地区</a>
                 </p>
                 <p class="lf"><i>发布时间：</i>
-                    <span th:text="${#dates.format(house.lastUpdateTime, 'yyyy-MM-dd')}">时间</span>
+                    <span th:text="${#temporals.format(house.lastUpdateTime, 'yyyy-MM-dd')}">时间</span>
                 </p>
                 <div class="clear"></div>
             </div>

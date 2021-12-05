@@ -66,6 +66,7 @@ public class HouseServiceImpl implements IHouseService {
     @Override
     @Transactional
     public ServiceResult<HouseDTO> save(HouseForm houseForm) {
+        ///xxxxxxxxx
         System.out.println("house form:" + houseForm);
         HouseDetail detail = new HouseDetail();
         ServiceResult<HouseDTO> subwayValidationResult
@@ -108,12 +109,14 @@ public class HouseServiceImpl implements IHouseService {
             houseTagMapper.save(houseTags);
             houseDTO.setTags(tags);
         }
-
+///xxxxxxxxx
         return ServiceResult.success(null, houseDTO);
+
     }
 
     @Override
     public ServiceResult update(HouseForm houseForm) {
+        ///xxxxxxxxx
         House house = this.houseMapper.findOne(houseForm.getId());
         if (house == null) {
             return ServiceResult.notFound();
@@ -141,12 +144,13 @@ public class HouseServiceImpl implements IHouseService {
         modelMapper.map(houseForm, house);
         house.setLastUpdateTime(LocalDateTime.now());
         houseMapper.save(house);
-
+///xxxxxxxxx
         return ServiceResult.success();
     }
 
     @Override
     public ServiceResult<HouseDTO> findCompleteOne(Long id) {
+        ///xxxxxxxxx
         House house = houseMapper.findOne(id);
         if (house == null) {
             return ServiceResult.notFound();
@@ -173,7 +177,7 @@ public class HouseServiceImpl implements IHouseService {
         result.setHouseDetail(detailDTO);
         result.setPictures(pictureDTOS);
         result.setTags(tagList);
-
+///xxxxxxxxx
         return ServiceResult.of(result);
     }
 
@@ -288,9 +292,12 @@ public class HouseServiceImpl implements IHouseService {
 //        int page = searchBody.getStart() / searchBody.getLength();
 //        Pageable pageable = PageRequest.of(page, searchBody.getLength(), sort);
         List<House> houses = houseMapper.findAll();
+
         houses.forEach(house -> {
             HouseDTO houseDTO = modelMapper.map(house, HouseDTO.class);
-            houseDTO.setCover(this.cdnPrefix + house.getCover());
+            houseDTO.setCover(this.cdnPrefix + "/"+house.getCover());
+            HouseDetailDTO houseDetailDTO = modelMapper.map(houseDetailMapper.findByHouseId(house.getId()), HouseDetailDTO.class);
+            houseDTO.setHouseDetail(houseDetailDTO);
             houseDTOS.add(houseDTO);
         });
 

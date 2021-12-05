@@ -113,6 +113,8 @@ public class HouseController {
     public String rentHousePage(@ModelAttribute RentSearch rentSearch,
                                 Model model, HttpSession session,
                                 RedirectAttributes redirectAttributes) {
+        ///
+        System.out.println("======================================+++++=" + rentSearch);
         if (rentSearch.getCityEnName() == null) {
             String cityEnNameInSession = (String) session.getAttribute("cityEnName");
             if (cityEnNameInSession == null) {
@@ -142,6 +144,7 @@ public class HouseController {
 
         model.addAttribute("total", serviceMultiResult.getTotal());
         model.addAttribute("houses", serviceMultiResult.getResult());
+        System.out.println("===============================================================" + serviceMultiResult.getResult());
 
         if (rentSearch.getRegionEnName() == null) {
             rentSearch.setRegionEnName("*");
@@ -160,8 +163,7 @@ public class HouseController {
     }
 
     @GetMapping("rent/house/show/{id}")
-    public String show(@PathVariable(value = "id") Long houseId,
-                       Model model) {
+    public String show(@PathVariable(value = "id") Long houseId, Model model) {
         if (houseId <= 0) {
             return "404";
         }

@@ -79,9 +79,7 @@
                             <a data-bind="*"
                                onclick="changeSimpleCondition('regionEnName', '*')">不限</a>
                             <tr th:each="region, regionStat: ${regions}">
-                                <a th:attr="data-bind=${region.enName}" href="javascript:void(0);"
-                                   th:onclick="'changeSimpleCondition(\'regionEnName\', \'' + ${region.enName} + '\')'"
-                                   th:text="${region.cnName}"></a>
+                                <a th:attr="data-bind=${region.enName}" href="javascript:void(0);" th:onclick="'changeSimpleCondition(\'regionEnName\', \'' + [[${region.enName}]] + '\')'" th:text="${region.cnName}"></a>
                             </tr>
                         </div>
                     </dd>
@@ -95,7 +93,7 @@
                             </a>
                             <tr th:each="priceBlock : ${priceBlocks}">
                                 <a th:attr="data-bind=${priceBlock.key}" href="javascript:void(0);"
-                                   th:onclick="'changeSimpleCondition(\'priceBlock\',\'' + ${priceBlock.key} + '\')'"
+                                   th:onclick="'changeSimpleCondition(\'priceBlock\',\'' + [[${priceBlock.key}]] + '\')'"
                                    th:text="${priceBlock.value.min < 0} ? (${priceBlock.value.max} + '元以下' ):
                                     (${priceBlock.value.max < 0} ? ${priceBlock.value.min} + '元以上' :
                                      ${priceBlock.value.min} + '-' + ${priceBlock.value.max} + '元')">
@@ -113,7 +111,7 @@
                             </a>
                             <tr th:each="areaBlock : ${areaBlocks}">
                                 <a th:attr="data-bind=${areaBlock.key}" href="javascript:void(0);"
-                                   th:onclick="'changeSimpleCondition(\'areaBlock\',\'' + ${areaBlock.key} + '\')'"
+                                   th:onclick="'changeSimpleCondition(\'areaBlock\',\'' + [[${areaBlock.key}]] + '\')'"
                                    th:text="${areaBlock.value.min < 0} ? (${areaBlock.value.max} + '平以下' ):
                                     (${areaBlock.value.max < 0} ? ${areaBlock.value.min} + '平以上' :
                                      ${areaBlock.value.min} + '-' + ${areaBlock.value.max} + '平')">
@@ -231,7 +229,7 @@
                         <li>
                             <div class="pic-panel">
                                 <a target="_blank" th:href="'/rent/house/show/' + ${house.id}">
-                                    <img th:src="${house.cover}" th:alt="${house.title}"/>
+                                    <img th:src="'http://' + ${house.cover}" th:alt="${house.title}"/>
                                 </a>
                             </div>
                             <div class="info-panel">
@@ -290,7 +288,7 @@
                                     <div class="price"><span class="num" th:text="${house.price}">价格</span>元/月
                                     </div>
                                     <div class="price-pre">
-                                            <span th:text="${#dates.format(house.lastUpdateTime, 'yyyy.MM.dd')} + ' 更新'">
+                                            <span th:text="${#temporals.format(house.lastUpdateTime, 'yyyy.MM.dd')} + ' 更新'">
                                                 更新时间
                                             </span>
                                     </div>

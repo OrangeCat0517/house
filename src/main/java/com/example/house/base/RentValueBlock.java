@@ -3,10 +3,12 @@ package com.example.house.base;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
+import lombok.Data;
 
 /**
  * 带区间的常用数值定义
  */
+@Data
 public class RentValueBlock {
     /**
      * 价格区间定义
@@ -47,29 +49,6 @@ public class RentValueBlock {
         this.max = max;
     }
 
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public int getMin() {
-        return min;
-    }
-
-    public void setMin(int min) {
-        this.min = min;
-    }
-
-    public int getMax() {
-        return max;
-    }
-
-    public void setMax(int max) {
-        this.max = max;
-    }
 
     public static RentValueBlock matchPrice(String key) {
         RentValueBlock block = PRICE_BLOCK.get(key);

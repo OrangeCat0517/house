@@ -35,4 +35,7 @@
     <update id="updatePassword">
         update user set password=#{password} where id = #{id}
     </update>
+    <select id="findOne" resultMap="userResultMap" parameterType="long">
+        select * from user where id=#{id}
+    </select>
 </mapper>

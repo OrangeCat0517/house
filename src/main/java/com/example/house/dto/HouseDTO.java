@@ -18,41 +18,23 @@ public class HouseDTO implements Serializable {
     private int direction;
     private int room;
     private int parlour;
-
     private int bathroom;
-
     private int floor;
-
     private Long adminId;
-
     private String district;
-
     private int totalFloor;
-
     private int watchTimes;
-
     private int buildYear;
-
     private int status;
-
     private LocalDateTime createTime;
-
     private LocalDateTime lastUpdateTime;
-
     private String cityEnName;
-
     private String regionEnName;
-
     private String street;
-
     private String cover;
-
     private int distanceToSubway;
-
     private HouseDetailDTO houseDetail;
-
     private List<String> tags;
-
     private List<HousePictureDTO> pictures;
 
     private int subscribeStatus;

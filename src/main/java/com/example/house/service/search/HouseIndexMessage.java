@@ -4,7 +4,7 @@ package com.example.house.service.search;
 import lombok.Data;
 
 @Data
-public class HouseIndexMessage {
+public class HouseIndexMessage { //打算放入kafka
 
     public static final String INDEX = "index";
     public static final String REMOVE = "remove";
